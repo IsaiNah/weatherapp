@@ -1,6 +1,7 @@
 
 <template>
-    <Teleport to="body"> good practice to get into for scaling
+  <!-- teleport good practice to get into for scaling -->
+    <Teleport to="body"> 
         <Transition name="modal-outer">
             <div
             v-show="modalActive"
