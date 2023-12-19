@@ -39,18 +39,36 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
-console.log("Console Working");
+import { useRouter } from 'vue-router';
 const openWeatherAPIKey = '6334597926f131b0bc4fba671c654c0f';
 const openWeatherSearchResult = ref(null); // Initialize as null
 const searchQuery = ref('');
 const searchError = ref(null);
 let queryTimeout = null; // Use a variable to store the timeout reference
 
-const previewCity = (searchResult)=>{
-console.log('previewCity ', searchResult);
+//Variables extracted from Query
+let cityName = null;
+let cityTemp = null;
+let cityTempFeel = null;
+let cityCountry = null;
+
+const router = useRouter();
+
+//Getting variables from query and into new route
+const previewCity = (cityname, citytemp, citytempfeel, cityCountry)=>{
+console.log('previewCity ', cityname, citytemp, citytempfeel);
 // extracting city & other data 
-const city = searchResult.value.Name;
-console.log('City:  ', city);
+//const city = searchResult.value.Name;
+router.push({
+  name: "cityView",
+   params: {
+     state: cityCountry, city: cityname
+    },
+    query:{
+    temp: citytemp,
+    feelslike: cityTempFeel,
+    },
+});
 };
 
 // Getting search results using a lazy search (user types in input and we start loading soon after typing stops)
@@ -64,13 +82,27 @@ const getSearchResults = async () => {
     if (searchQuery.value !== '') {
       try {
         const result = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${searchQuery.value}&appid=${openWeatherAPIKey}`
+          `https://api.openweathermap.org/data/2.5/weather?q=${searchQuery.value}&appid=${openWeatherAPIKey}&units=metric `
           
           );
         openWeatherSearchResult.value = result.data;
-        previewCity(openWeatherSearchResult) 
+        
         console.log(openWeatherSearchResult.value);
         console.log('NAME IS : ', openWeatherSearchResult.value.name);
+        console.log('TEMP IS : ', openWeatherSearchResult.value.main.temp);
+        console.log('Feels TEMP IS : ', openWeatherSearchResult.value.main.feels_like);
+        console.log('Sys . country : ', openWeatherSearchResult.value.sys.country);
+        //TODO Now that I managed to extract data, I should pass it on to the next component 
+        cityName = openWeatherSearchResult.value.name;
+        cityTemp = openWeatherSearchResult.value.main.temp;
+        cityTempFeel = openWeatherSearchResult.value.main.feels_like;
+        cityCountry = openWeatherSearchResult.value.sys.country;
+
+        console.log(cityName, ' ', cityTemp, ' ', cityTempFeel);
+
+        previewCity(cityName, cityTemp, cityTempFeel, cityCountry);
+      
+        //cityTemp = openWeatherSearchResult.value.
       } catch (error) {
         console.error('Error fetching data:', error);
         searchError.value = true;
