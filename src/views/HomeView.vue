@@ -20,9 +20,38 @@
      class="py-2 cursor-pointer" 
      >
     
+     Temperature: {{ searchResult.main && searchResult.main.temp }}°C,
+            Feels Like: {{ searchResult.main && searchResult.main.feels_like }}°C,
+            Wind Speed: {{ searchResult.wind && searchResult.wind.speed }} m/s
     </li>
-      {{ searchresult.place_name }}
+   
     </ul> -->
+
+    <!-- outputting li for each result available -->
+<!-- <ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
+  <li v-for="searchResult in openWeatherSearchResult" :key="searchResult.id" class="py-2 cursor-pointer">
+    <p>
+      <span class="font-bold">{{ searchResult.name }}</span>
+      - Temperature:   {{ seacrhResult.temp}}
+    </p>
+  </li>
+</ul> -->
+
+
+<!-- <ul v-if="searchResults" class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
+        <li v-for="searchResult in openWeatherSearchResult" :key="searchResult.id" class="py-2 cursor-pointer">
+          <p v-if="searchResult.main && searchResult.wind">
+            <span class="font-bold">{{ result.name }}</span> -
+            Temperature: {{ searchResult.temp || 'N/A' }}°C,
+            Feels Like: {{ searchResult.main.feels_like || 'N/A' }}°C,
+            Wind Speed: {{ searchResult.wind.speed || 'N/A' }} m/s
+          </p>
+          <p v-else>
+            No weather data available for {{ searchResult.name }}
+          </p>
+        </li>
+      </ul> -->
+
    
     </div>
     
@@ -49,7 +78,7 @@ const getSearchResults = async () => {
     if (searchQuery.value !== '') {
       try {
         const result = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${searchQuery.value}&appid=${openWeatherAPIKey}&types=place`
+          `https://api.openweathermap.org/data/2.5/weather?q=${searchQuery.value}&appid=${openWeatherAPIKey}&type=name`
           //REMOVE THIS check gpt for updated code
           );
         openWeatherSearchResult.value = result.data;
@@ -61,6 +90,7 @@ const getSearchResults = async () => {
       // Below is only needed IN CASE the value in the search is empty; otherwise, we return above
       // Return is there to prevent setting the value to null otherwise
       openWeatherSearchResult.value = null;
+      console.error('openWeatherSearchResult set to null');
     }
   }, 300);
 };
