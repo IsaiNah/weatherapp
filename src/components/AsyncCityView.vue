@@ -18,19 +18,39 @@
         <p class="text-sm mb-12">Time :
        {{ formattedTime }}
         </p>
+        <p class="text-8xl mb-8">
+            {{ Math.round(route.params.temp) }}&deg;
 
-        <p>
-            {{ 
-                console.log('calling getWeatherData ', weatherData.dt) 
-
-                
-                
-                
-                
-                }}
         </p>
+        <p class="text-center">
+            Feels like {{ Math.round(route.params.tempfeel) }}&deg;
 
-        </div>
+        </p>
+        
+
+        <p class="capitalize">
+            {{  weatherData.weather[0].main   }},  {{  weatherData.weather[0].description   }}
+        </p>
+        <img 
+  v-if="weatherData && weatherData.weather && weatherData.weather[0].icon"
+  class="w-[150px] h-auto"
+  :src="`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`"
+  alt=""
+/>
+</div>
+<!-- {{ console.log('Icon is ', weatherData.weather[0].icon) }} -->
+
+<hr class="border-white border-opacity-10 border w-full"/>
+
+<!-- Hourly Weather -->
+<div class="mx-w-screen-md w-full  py-12">
+  <div class="mx-8 text-white">
+    <h2 class="mb-4">Hourly Weather</h2>
+    <div class="flex gap-10 overflow-x-scroll"></div>
+  </div>
+</div>
+
+       
         </div>
     </div>
 </template>
@@ -53,36 +73,11 @@ const getWeatherData = async () => {
                 // in tutorial he uses the onecall api which contains time data as well, as of this day this is payable
                 // if I want to do this I need to request time and date information from another place 
                 `https://api.openweathermap.org/data/2.5/weather?q=${route.params.city}&appid=${openWeatherAPIKey}&units=metric`
+                //NOTE Hourly call not used due to credit card details needed incase of over 1000 api calls
+               // 'https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=-94.04&appid={openWeatherAPIKey}&units=metric'
         );
 
-       // const response = weatherData.data;
-
-        //extract timestemp
-      //  const timestamp = response.dt;
-
-        // Convert timestamp to a readable date and time
-      //  const date = new Date(timestamp * 1000); // Convert from seconds to milliseconds
-      //  formattedDate = date.toLocaleDateString();
-      //  formattedTime = date.toLocaleTimeString();
-
-//console.log('Current Date:', formattedDate);
-//console.log('Current Time:', formattedTime);
-
-       // console.log("timestamp ", timestamp);
-    //   // cal current date & time
-    //   const localOffset = new Date().getTimezoneOffset() * 60000;
-    // const utc = weatherData.data.current.dt * 1000 + localOffset;
-    // weatherData.data.currentTime =
-    //   utc + 1000 * weatherData.data.timezone_offset;
-
-    // // cal hourly weather offset
-    // weatherData.data.hourly.forEach((hour) => {
-    //   const utc = hour.dt * 1000 + localOffset;
-    //   hour.currentTime =
-    //     utc + 1000 * weatherData.data.timezone_offset;
-    // });
-
-
+     
 
     return weatherData.data;
   } catch (err) {
@@ -97,5 +92,14 @@ const weatherData = await getWeatherData();
                   const date = new Date(weatherData.dt * 1000); // Convert from seconds to milliseconds
                   const  formattedDate = date.toLocaleDateString();
                   const  formattedTime = date.toLocaleTimeString();
+
+                  const temp = weatherData.main.temp;
+                  const feeltemp = weatherData.main.feels_like;
+
+                  console.log(temp, ' ', feeltemp);
+
+    
+                  http://openweathermap.org/img/w/10d.png
+                  console.log(`http://openweathermap.org/img/w/${weatherData.weather.icon}.png`);
 </script>
 

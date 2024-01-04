@@ -64,7 +64,11 @@ console.log('previewCity ', cityname, citytemp, citytempfeel);
 router.push({
   name: "cityView",
    params: {
-     state: cityCountry, city: cityname
+     state: cityCountry, 
+     city: cityname,
+     tempfeel: citytempfeel,
+     temp: citytemp, 
+     
     },
     query:{
     lat: lat,

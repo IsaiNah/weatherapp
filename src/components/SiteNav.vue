@@ -14,7 +14,9 @@
     <div class="flex gap-3 flex-1 justify-end"> 
        <i class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-150 cursor-pointer"
        @click="toggleModal"></i>
-       <i class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"></i>
+       <i class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
+       @click="addCity"
+       ></i>
 
     </div>
 
@@ -59,6 +61,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { uid } from 'uid';
 import { RouterLink } from 'vue-router';
 import BaseModal from './BaseModal.vue';
 
@@ -66,4 +69,21 @@ const modalActive = ref(null);
 const toggleModal = () => {
     modalActive.value = !modalActive.value;
 }
+
+// const route = userRoute();
+// const addCity = () => {
+//   if (localStorage.getItem('savedCities')) {
+//     savedCities.value = JSON.parse(localStorage.getItem("savedCities"));
+//   }
+// };
+// const savedCities = ref([]);
+// const locationObject = {
+//   id: uid(),
+//   state: route.params.state,
+//   city: route;params.city,
+//   coords: {
+//     lat: route.query.lat,
+//     lng: route.query.lng
+//   }
+// };
 </script>
