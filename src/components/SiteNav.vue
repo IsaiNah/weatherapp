@@ -62,21 +62,72 @@
 <script setup>
 import { ref } from 'vue';
 import { uid } from 'uid';
+import { useRoute, useRouter } from 'vue-router';
 import { RouterLink } from 'vue-router';
 import BaseModal from './BaseModal.vue';
+
+const savedCities = ref([]);
+const route = useRoute();
+const router = useRouter();
+const modalActive = ref(null);
+
+const toggleModal = () => {
+    modalActive.value = !modalActive.value;
+}
+
+const addCity = () => {
+    // Load existing cities from local storage
+    if (localStorage.getItem('savedCities')) {
+        savedCities.value = JSON.parse(localStorage.getItem('savedCities'));
+    }
+
+    // Create a new city object
+    const locationObj = {
+        id: uid(),
+        state: route.params.state,
+        city: route.params.city,
+        tempfeel: route.params.tempfeel,
+        temp: route.params.temp,
+    };
+
+    // Push the new city object to the array
+    savedCities.value.push(locationObj);
+
+    // Save the updated array to local storage
+    localStorage.setItem('savedCities', JSON.stringify(savedCities.value));
+
+    // Clear the preview query parameter
+    let query = Object.assign({}, route.query);
+    delete query.preview;
+    router.replace({ query });
+};
+</script>
+<!-- 
+<script setup>
+import { ref } from 'vue';
+import { uid } from 'uid';
+import { RouterLink } from 'vue-router';
+import BaseModal from './BaseModal.vue';
+
+const savedCities = ref([]);
+const addCity = () => {
+//   if (localStorage.getItem('savedCities')) {
+//     savedCities.value = JSON.parse(localStorage.getItem("savedCities"));
+//   }
+// };
 
 const modalActive = ref(null);
 const toggleModal = () => {
     modalActive.value = !modalActive.value;
 }
 
-// const route = userRoute();
+ //const route = userRoute();
 // const addCity = () => {
 //   if (localStorage.getItem('savedCities')) {
 //     savedCities.value = JSON.parse(localStorage.getItem("savedCities"));
 //   }
 // };
-// const savedCities = ref([]);
+// 
 // const locationObject = {
 //   id: uid(),
 //   state: route.params.state,
@@ -86,4 +137,4 @@ const toggleModal = () => {
 //     lng: route.query.lng
 //   }
 // };
-</script>
+</script> -->
