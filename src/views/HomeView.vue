@@ -3,43 +3,45 @@
 <template>
   <main class="container text-white">
     <div class="pt-4 mb-8 relative">
-      <input type="text" 
-      v-model="searchQuery" 
-      @input="getSearchResults"
-      placeholder="Search for a city or state" 
-      class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary
-      focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]"/>
+      <!-- v-model below binds this field to the JavaScript variable above -->
+      <input
+        type="text"
+        v-model="searchQuery"
+        @input="getSearchResults"
+        placeholder="Search for a city or state"
+        class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]"
+      />
       
-
-    <!-- outputting li for each result available -->
-<ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
- <p v-if="searchError"> City could not be found on this planet </p>
- 
- <template v-else>
-   <li v-for="searchResult in openWeatherSearchResult" 
-   :key="searchResult.id" 
-   class="py-2 cursor-pointer"
-   
-   >
-      <p>
-        <span class="font-bold">{{ searchResult }}</span>
-         {{ seacrhResult}}
-      </p>
-    </li>
- </template>
-</ul>
-
-
-   
+      <!-- outputting li for each result available -->
+      <ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]" v-if="mapboxSearchResults">
+        <p class="py-2" v-if="searchError">Sorry, something went wrong, please try again.</p>
+        <p class="py-2" v-if="!searchError && mapboxSearchResults.length === 0">No results match your query, try a different term.</p>
+        <template v-else>
+          <li v-for="searchResult in mapboxSearchResults" :key="searchResult.id" class="py-2 cursor-pointer" @click="previewCity(searchResult)">
+            {{ searchResult.place_name }}
+          </li>
+        </template>
+      </ul>
     </div>
-    
-     </main>
+    <div class="flex flex-col gap-4">
+      <!-- Because of the async getCities component with the await, we need to use Suspense -->
+      <Suspense>
+        <CityList />
+        <template #fallback>
+          <p>Loading...</p>
+          <CityCardSkeleton />
+        </template>
+      </Suspense>
+    </div>
+  </main>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import CityList from "../components/CityList.vue";
+
 const openWeatherAPIKey = '6334597926f131b0bc4fba671c654c0f';
 const openWeatherSearchResult = ref(null); // Initialize as null
 const searchQuery = ref('');

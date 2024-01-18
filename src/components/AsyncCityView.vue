@@ -50,6 +50,12 @@
   </div>
 </div>
 
+<div class="flex items-center gap-2 py-12 text-white cursor-pointer 
+duration-150 hover:text-red-600"
+ @click="removeCity"
+>
+  <p>Remove City</p>
+</div>
        
         </div>
     </div>
@@ -86,6 +92,11 @@ const getWeatherData = async () => {
 };
 const weatherData = await getWeatherData();
 
+const router = useRouter();
+const removeCity = () => {};
+
+//TODO REMOVE BELOW
+
     //extract timestemp
     const timestamp = weatherData.dt;
                  // Convert timestamp to a readable date and time
@@ -101,5 +112,9 @@ const weatherData = await getWeatherData();
     
                   http://openweathermap.org/img/w/10d.png
                   console.log(`http://openweathermap.org/img/w/${weatherData.weather.icon}.png`);
+
+
+
+
 </script>
 

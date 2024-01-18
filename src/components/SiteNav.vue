@@ -16,6 +16,7 @@
        @click="toggleModal"></i>
        <i class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
        @click="addCity"
+       v-if="route.query.preview"
        ></i>
 
     </div>
