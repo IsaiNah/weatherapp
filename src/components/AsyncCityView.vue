@@ -92,8 +92,8 @@ const getWeatherData = async () => {
 };
 const weatherData = await getWeatherData();
 
-const router = useRouter();
-const removeCity = () => {};
+// const router = useRouter();
+// const removeCity = () => {};
 
 //TODO REMOVE BELOW
 
