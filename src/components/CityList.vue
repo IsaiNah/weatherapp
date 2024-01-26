@@ -12,6 +12,7 @@
 <script setup>
 import axios from "axios";
 import { ref } from "vue";
+import { useRoute, useRouter } from 'vue-router';
 import CityCard from "./CityCard.vue";
 
 const openWeatherAPIKey = '6334597926f131b0bc4fba671c654c0f';
@@ -41,6 +42,19 @@ const getCities = async () => {
 };
 
 await getCities();
+
+const router = useRouter();
+const goToCityView = (city) => {
+    router.push({
+        name: "cityView",
+        params: {
+            state: city.state, 
+            city: city.city,
+            tempfeel: city.tempfeel,
+            temp: city.temp},
+        query:  {id: city.id},
+    });
+};
 </script>
 
 

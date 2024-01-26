@@ -95,13 +95,16 @@ const addCity = () => {
     savedCities.value.push(locationObj);
 
     // Save the updated array to local storage
-    localStorage.setItem('savedCities', JSON.stringify(savedCities.value));
+    localStorage.setItem("savedCities", JSON.stringify(savedCities.value));
 
     // Clear the preview query parameter
     let query = Object.assign({}, route.query);
     delete query.preview;
+    query.id = locationObj.id;
     router.replace({ query });
 };
+
+
 </script>
 <!-- 
 <script setup>

@@ -54,6 +54,8 @@
 duration-150 hover:text-red-600"
  @click="removeCity"
 >
+<i class="fa fa-trash" aria-hidden="true"></i>
+
   <p>Remove City</p>
 </div>
        
@@ -63,7 +65,7 @@ duration-150 hover:text-red-600"
 
 <script setup>
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from 'vue-router';
 const openWeatherAPIKey = '6334597926f131b0bc4fba671c654c0f';
 const route = useRoute();
 
@@ -92,8 +94,16 @@ const getWeatherData = async () => {
 };
 const weatherData = await getWeatherData();
 
-// const router = useRouter();
-// const removeCity = () => {};
+//Need router to redirect after deleting city
+ const router = useRouter();
+ const removeCity = () => {
+  const cities = JSON.parse(localStorage.getItem("savedCities"));
+  const updatedCities = cities.filter((city) => city.id !== route.query.id);
+  localStorage.setItem('savedCities', JSON.stringify(updatedCities));
+  router.push({
+    name: "home",
+  })
+  };
 
 //TODO REMOVE BELOW
 
